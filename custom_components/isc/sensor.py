@@ -118,13 +118,6 @@ class ics_Sensor(Entity):
 		"""Return the icon to use in the frontend."""
 		return self._icon
 
-	def fix_text(self, s):
-		"""Remove Umlaute."""
-		s = ''.join(e for e in s if (e.isalnum() or e == ' '))
-		s = s.replace(chr(195), 'u')
-		s = s.replace(chr(188), 'e')
-		return s
-
 	def exc(self):
 		"""Print nicely formated exception."""
 		_LOGGER.error("\n\n============= ICS Integration Error ================")
@@ -231,14 +224,14 @@ class ics_Sensor(Entity):
 						event_end_date = event_date
 
 					# handle empty or non existing summary field
-					event_summary = self.fix_text(self._show_blank)
+					event_summary = self._show_blank
 					if("SUMMARY" in e):
-						if(self.fix_text(e["SUMMARY"]) != ""):
-							event_summary = self.fix_text(e["SUMMARY"])
+						if(e.get("SUMMARY") != ""):
+							event_summary = e["SUMMARY"]
 
 					if(event_summary):
-						if(event_summary.lower().startswith(self.fix_text(self._sw).lower()) and
-						event_summary.lower().find(self.fix_text(self._contains).lower())>=0 and
+						if(event_summary.lower().startswith(self._sw.lower()) and
+						event_summary.lower().find(self._contains.lower())>=0 and
 						self.matches_regex(event_summary)):
 							if((event_date > now) or (self._show_ongoing and event_end_date > now)):
 								# logic to skip events, but save certain details,
@@ -267,14 +260,14 @@ class ics_Sensor(Entity):
 									self.ics['extra']['start'] = event_date.astimezone()
 									self.ics['extra']['end'] = event_end_date.astimezone()
 									if("LOCATION" in e):
-										self.ics['extra']['location'] = self.fix_text(e["LOCATION"])
+										self.ics['extra']['location'] = e["LOCATION"]
 									et = event_date
 
 								# if grouping is active and we hat it again, append
 								elif((event_date == et) and (self._group_events)):
 									self.ics['extra']['description'] += " / " + event_summary
 									if("LOCATION" in e):
-										self.ics['extra']['location'] += " / " + self.fix_text(e["LOCATION"])
+										self.ics['extra']['location'] += " / " + e["LOCATION"]
 									# store earliest end time
 									if(self.ics['extra']['end'] > e["DTEND"].dt):
 										self.ics['extra']['end'] = e["DTEND"].dt.astimezone()
