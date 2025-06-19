@@ -3,14 +3,14 @@
   "name": "ics",
   "documentation": "https://github.com/KoljaWindeler/ics/blob/master/README.md",
   "config_flow": true,
-  "version": "20250114.01",
+  "version": "20250619.01",
   "requirements": [
     "recurring-ical-events",
-    "icalendar>=6.0.0",
+    "icalendar>=6.4",
     "tzlocal",
     "integrationhelper",
     "voluptuous",
-    "python-dateutil>2.7.3",
+    "python-dateutil>2.8.2",
     "pytz"
   ],
   "dependencies": [],
