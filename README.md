@@ -1,4 +1,4 @@
-# ICS
+# ICS_CUSTOM
 
 Adds a sensor to Home Assistant that displays the date and number of days to the next event. 
 E.g. 5 days until the trash will be picked up. The information will be read from a user definded 
